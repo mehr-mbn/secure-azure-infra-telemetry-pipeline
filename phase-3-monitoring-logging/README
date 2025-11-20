@@ -1,0 +1,37 @@
+# Phase 3 — AMA + DCR Telemetry Validation (Syslog & Perf)
+
+This phase validates that Azure Monitor Agent (AMA) and the Data Collection Rule (DCR) are correctly sending telemetry from the VM to Log Analytics.
+
+---
+
+## ✅ What Was Validated
+
+- VM `vm-secure-ubuntu` sends **Heartbeat** to Log Analytics.
+- Syslog events are collected via DCR and stored in the `Syslog` table.
+- Performance counters (CPU, memory, disk) are collected and visible in the `Perf` table.
+- Log Analytics queries confirmed:
+
+### Syslog
+
+```kusto
+Syslog
+| where TimeGenerated > ago(30m)
+| where Computer == "vm-secure-ubuntu"
+| project TimeGenerated, Computer, Facility, SeverityLevel, SyslogMessage
+| top 50 by TimeGenerated desc
+
+
+### Performance Counters
+
+Perf
+| where TimeGenerated > ago(30m)
+| where Computer == "vm-secure-ubuntu"
+| summarize avg(CounterValue) by CounterName
+| top 20 by avg_CounterValue desc
+
+
+📸 Evidence
+
+syslog-ingestion.png – Syslog events from vm-secure-ubuntu in Log Analytics
+
+perf-ingestion.png – Performance counters from vm-secure-ubuntu in Log Analytics
