@@ -1,0 +1,47 @@
+#!/bin/bash
+
+RG="rg-secure-infra-demo"
+LOC="canadacentral"
+VNET="vnet-secure-infra"
+SUBNET="snet-app"
+NSG="nsg-secure-app"
+VM="vm-secure-ubuntu"
+KV="kvsecure6386"
+LAW="law-secure-infra"
+DCR="dcr-secure-syslog-perf"
+
+# Create resource group
+az group create -n $RG -l $LOC
+
+# VNet + Subnet
+az network vnet create \
+  -g $RG -n $VNET \
+  --address-prefix 10.10.0.0/16 \
+  --subnet-name $SUBNET \
+  --subnet-prefix 10.10.1.0/24
+
+# NSG
+az network nsg create -g $RG -n $NSG
+
+# VM (NO PUBLIC IP)
+az vm create \
+  -g $RG -n $VM \
+  --image Ubuntu2204 \
+  --vnet-name $VNET \
+  --subnet $SUBNET \
+  --assign-identity \
+  --nsg $NSG \
+  --public-ip-address ""
+
+# Key Vault
+az keyvault create \
+  -g $RG -n $KV \
+  --location $LOC \
+  --enable-rbac-authorization true
+
+# LAW
+az monitor log-analytics workspace create \
+  -g $RG -n $LAW
+
+# DCR (Syslog + Perf)
+# (Full JSON added later)

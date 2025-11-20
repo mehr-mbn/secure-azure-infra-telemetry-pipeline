@@ -1,0 +1,69 @@
+# Phase 1 — Secure Azure Infrastructure & Managed Identity Access
+
+This phase delivers the foundational security layer of the project:
+a fully locked-down Azure VM (no public IP), identity-based access,
+and secure secret retrieval without credentials.
+
+---
+
+## 🔐 What Was Built
+
+### Network & Access
+- Private-only Ubuntu VM (`vm-secure-ubuntu`) deployed with **no Public IP**
+- Access controlled through **Azure Bastion**
+- Virtual Network + Subnet + NSG following least-privilege rules
+
+### Identity & Secrets
+- Enabled **System-Assigned Managed Identity** on the VM
+- Azure Key Vault (`kvsecure6386`) configured with **RBAC**, not access policies
+- Assigned **Key Vault Secrets User** role to the VM identity
+- Successfully retrieved secret from Key Vault **inside the VM without any credentials**
+
+### Logging & Telemetry
+- Log Analytics Workspace configured (`law-secure-infra`)
+- Azure Monitor Agent (AMA) installed
+- Data Collection Rule (`dcr-secure-syslog-perf`) created for:
+  - Syslog (auth, authpriv)
+  - Performance metrics
+- DCR fully associated to the VM
+
+---
+
+## 🧪 Validation
+
+A Python script executed inside the VM successfully accessed Key Vault:
+
+"Super-Secret-Value-123"
+
+
+This confirms:
+- Identity-based authentication works end-to-end  
+- No secrets/keys/credentials stored anywhere  
+- RBAC configuration is correct  
+- Network isolation is enforced  
+
+Evidence available in `evidence/`.
+
+---
+
+## 📁 Structure
+
+phase-1-infra-secret/
+│
+├── README.md
+├── scripts/
+│ ├── create-infra.sh
+│ ├── get-secret.py
+│ └── notes.md
+└── evidence/
+├── resource-group-overview.png
+├── keyvault-rbac.png
+├── dcr-association.png
+└── secret-retrieval-managed-identity.png
+
+---
+
+## ✔️ Phase Status  
+**Completed**
+
+Next phase: Private Endpoint + disable public access on Key Vault.

@@ -1,0 +1,28 @@
+# Secure Azure Infrastructure & Telemetry Pipeline (Multi-Phase Project)
+
+This repository contains a full, multi-phase Azure security and observability project.  
+It starts with a secure VM deployment (no public IP), continues with private networking, monitoring, AMA+DCR telemetry, and ends with a complete Sentinel analytics pipeline.
+
+
+## Phases
+
+### 🔹 Phase 1 — Secure Infrastructure + Managed Identity + Key Vault Secret Retrieval
+Status: ✔️ Completed  
+Folder: `phase-1-infra-secret/`
+
+### 🔹 Phase 2 — Private Endpoint + Disable Public Access (Key Vault)
+Status: Pending  
+Folder: `phase-2-private-endpoint/`
+
+### 🔹 Phase 3 — AMA Syslog + Perf Telemetry → LAW + Alerts
+Status: Pending  
+Folder: `phase-3-monitoring-logging/`
+
+### 🔹 Phase 4 — Sentinel Workbook + Analytics + Automation
+Status: Pending  
+Folder: `phase-4-sentinel-workbook/`
+
+### 🔹 Phase 5 — Final Packaging for Portfolio & Resume
+Status: Pending  
+Folder: `phase-5-final-package/`
+

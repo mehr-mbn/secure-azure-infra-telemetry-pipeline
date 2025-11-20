@@ -1,0 +1,6 @@
+# Notes for Phase 1
+- VM created without public IP
+- Bastion used for temporary access
+- AMA installed automatically
+- Syslog + perf enabled via DCR
+- Secret retrieval tested successfully
