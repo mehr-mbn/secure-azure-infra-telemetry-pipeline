@@ -1,0 +1,18 @@
+# Phase 2 — Key Vault Private Endpoint + Disable Public Access
+
+This phase applies network hardening to Key Vault by enforcing private-only access.
+
+## 🔐 Key Improvements
+
+- Added a **Private Endpoint** (`pe-kv`) for Key Vault
+- Configured **Private DNS Zone** for vault name resolution
+- Disabled **Public Network Access** on Key Vault
+- Ensures the VM can access Key Vault only through the internal VNet
+
+## 📸 Evidence
+
+- `kv-private-endpoint.png` (Private Endpoint approved)
+- `kv-public-access-disabled.png` (Public access disabled)
+
+## ✔️ Status
+Phase 2 completed.
