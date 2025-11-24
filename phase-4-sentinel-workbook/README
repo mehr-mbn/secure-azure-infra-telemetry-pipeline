@@ -1,0 +1,27 @@
+# Phase 4 – Sentinel Workbook + Basic Analytics Rule
+
+This phase adds a lightweight visualization layer on top of the secure infrastructure and telemetry pipeline.  
+Microsoft Sentinel is used only for monitoring dashboards and simple analytics, since advanced SOAR/SIEM features were already implemented in my other Sentinel-focused projects.
+
+## What Was Added
+
+### ✔️ Sentinel Activation
+Microsoft Sentinel was enabled on the Log Analytics workspace (`law-secure-infra`).
+
+### ✔️ Workbook
+A simple workbook was created for:
+- Syslog volume
+- Performance metrics
+- VM heartbeat
+
+The purpose is to visualize logs coming from AMA + DCR, not to build a full SOC dashboard.
+
+### ✔️ Analytics Rule
+A basic scheduled rule was created:
+
+**SSH Failed Password Attempts > 3 in 5 minutes**
+
+Used to demonstrate how telemetry can trigger an alert.
+
+## Status
+Phase 4 completed. Sentinel is used here only as a visibility layer.

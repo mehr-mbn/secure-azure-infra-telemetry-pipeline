@@ -1,28 +1,78 @@
-# Secure Azure Infrastructure & Telemetry Pipeline (Multi-Phase Project)
+# Secure Azure Infrastructure & Telemetry Pipeline
 
-This repository contains a full, multi-phase Azure security and observability project.  
-It starts with a secure VM deployment (no public IP), continues with private networking, monitoring, AMA+DCR telemetry, and ends with a complete Sentinel analytics pipeline.
+This repository showcases a secure-by-default Azure infrastructure for a Linux workload,  
+combined with identity-based access, private connectivity, and an end-to-end telemetry pipeline.
 
+The focus is on **infrastructure security and observability**. 
+Advanced SIEM/SOAR use cases are covered in my other Sentinel projects.
+
+---
+
+## Architecture Overview
+
+Key design principles:
+
+- No public exposure for the VM (no public IPs)
+- All access controlled via Azure Bastion and private networking
+- Identity-based access to secrets using Managed Identity + Key Vault RBAC
+- Key Vault reachable only over a Private Endpoint (public network access disabled)
+- Centralized telemetry using Azure Monitor Agent (AMA) + Data Collection Rules (DCR)
+- Log Analytics + Sentinel used for visibility and simple analytics
+
+---
 
 ## Phases
 
-### 🔹 Phase 1 — Secure Infrastructure + Managed Identity + Key Vault Secret Retrieval
-Status: ✔️ Completed  
+### Phase 1 – Secure VM + Managed Identity + Key Vault Secret Retrieval ✅  
 Folder: `phase-1-infra-secret/`
 
-### 🔹 Phase 2 — Private Endpoint + Disable Public Access (Key Vault)
-Status: Pending  
+- Private-only Ubuntu VM (`vm-secure-ubuntu`) with no public IP
+- Access via Azure Bastion
+- System-assigned Managed Identity enabled
+- Azure Key Vault with RBAC (no access policies)
+- VM identity granted *Key Vault Secrets User*
+- Secret successfully retrieved inside the VM using `DefaultAzureCredential`
+- AMA + DCR configured for Syslog & Perf telemetry
+
+---
+
+### Phase 2 – Key Vault Private Endpoint + Disable Public Access ✅  
 Folder: `phase-2-private-endpoint/`
 
-### 🔹 Phase 3 — AMA Syslog + Perf Telemetry → LAW + Alerts
-Status: Pending  
+- Private Endpoint created for Key Vault
+- Private DNS zone configured for `privatelink.vaultcore.azure.net`
+- Public network access for the vault disabled
+- Ensures Key Vault is only reachable from the VNet via the private endpoint
+
+---
+
+### Phase 3 – AMA + DCR Telemetry Validation (Syslog & Perf) ✅  
 Folder: `phase-3-monitoring-logging/`
 
-### 🔹 Phase 4 — Sentinel Workbook + Analytics + Automation
-Status: Pending  
+- Confirmed AMA heartbeats from `vm-secure-ubuntu`
+- Syslog events collected into `Syslog` table
+- Performance counters (CPU, memory, disk) collected into `Perf` table
+- Evidence screenshots stored under `evidence/`
+
+---
+
+### Phase 4 – Sentinel Workbook + Basic Analytics Rule ✅  
 Folder: `phase-4-sentinel-workbook/`
 
-### 🔹 Phase 5 — Final Packaging for Portfolio & Resume
-Status: Pending  
-Folder: `phase-5-final-package/`
+- Microsoft Sentinel enabled on `law-secure-infra`
+- Lightweight workbook created: Syslog volume, Perf trend, Heartbeat count
+- Basic analytics rule for SSH failed password attempts (>3 in 5 minutes)
+- Sentinel used here as a **visibility layer** on top of the telemetry pipeline
 
+---
+
+## Tech Stack
+
+- Azure Resource Group, VNet, Subnet, NSG
+- Ubuntu VM with system-assigned Managed Identity
+- Azure Key Vault (RBAC, Private Endpoint, public network access disabled)
+- Azure Bastion (for just-in-time, no-public-IP access)
+- Azure Monitor Agent (AMA) + Data Collection Rules (Syslog & Perf)
+- Log Analytics Workspace
+- Microsoft Sentinel (workbook + basic analytics rule)
+- KQL for Syslog/Perf/SSH failed logins
